@@ -57,7 +57,7 @@ module.exports = configure((/* ctx */) => ({
 
     // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
 
-    // publicPath: '/',
+    publicPath: 'https://brandondaviddee.github.io/calorie-counter/',
     // analyze: true,
     // env: {},
     // rawDefine: {}
