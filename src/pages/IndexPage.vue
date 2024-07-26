@@ -1,6 +1,9 @@
 <template>
   <q-page class="items-center justify-evenly">
-    <SiteSettings />
+    <SiteSettings
+      @export="onExport"
+      @import="triggerFileInput"
+    />
     <div class="q-ml-lg q-mr-lg">
       <div class="row q-mt-sm">
         <div class="col">
@@ -34,7 +37,7 @@
               outline
               label="Clear Data"
               :disable="!groups.length"
-              @click="clearData"
+              @click="dialog = true"
             />
           </q-btn-group>
         </div>
@@ -83,14 +86,37 @@
         />
       </q-card>
     </div>
+    <q-dialog v-model="dialog">
+      <q-card style="width: 500px; max-width: 60vw;">
+        <q-card-section>Are you sure? This will wipe everything out permanently?</q-card-section>
+        <q-card-actions align="right">
+          <q-btn
+            v-close-popup
+            label="Cancel"
+            flat
+          />
+          <q-btn
+            label="Clear Data"
+            color="red"
+            @click="clearData"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+    <input
+      ref="fileInput"
+      type="file"
+      style="display: none;"
+      @change="handleFileChange"
+    >
   </q-page>
 </template>
 
 <script lang="ts">
-import { EntryGroup } from 'src/models';
+import { EntryGroup, ExportedData } from 'src/models';
 import { defineComponent, ref, computed } from 'vue';
 import SiteSettings from 'src/components/SiteSettings.vue';
-import { useQuasar } from 'quasar';
+import { useQuasar, exportFile } from 'quasar';
 import EntryGroupDetail from 'src/components/EntryGroupDetail.vue';
 import GrandTotals from 'src/components/GrandTotals.vue';
 import sampleData from './sample-data';
@@ -99,13 +125,17 @@ export default defineComponent({
   components: { SiteSettings, EntryGroupDetail, GrandTotals },
   setup() {
     const $q = useQuasar();
-    const isDark = computed(() => $q.dark.isActive);
-
-    const showProtein = ref(true);
-    const showFat = ref(true);
-    const showCarbs = ref(true);
-
+    const dialog = ref(false);
+    const fileInput = ref();
     const groups = ref<EntryGroup[]>([]);
+    const isDark = computed(() => $q.dark.isActive);
+    const showCarbs = ref(true);
+    const showFat = ref(true);
+    const showProtein = ref(true);
+
+    function makeNotifyMessage(type: string, message: string) {
+      $q.notify({ type, message });
+    }
 
     function loadSampleData() {
       groups.value = sampleData;
@@ -113,6 +143,7 @@ export default defineComponent({
 
     function clearData() {
       groups.value = [];
+      dialog.value = false;
     }
 
     function addNewGroup() {
@@ -123,7 +154,48 @@ export default defineComponent({
       groups.value.push(newGroup);
     }
 
+    function onExport() {
+      const exportedData: ExportedData = {
+        application: 'calorie-counter',
+        timestamp: new Date(),
+        data: groups.value,
+      };
+      const jsonData = JSON.stringify(exportedData, null, 2);
+      const status = exportFile('calorie-counter-export.json', jsonData, {
+        mimeType: 'application/json',
+        encoding: 'utf-8',
+      });
+      if (status === true) {
+        makeNotifyMessage('positive', 'File has been downloaded');
+      } else {
+        makeNotifyMessage('negative', 'Browser Blocked Download');
+      }
+    }
+
+    function triggerFileInput() {
+      fileInput.value.click();
+    }
+
+    const handleFileChange = (event: Event) => {
+      const target = event.target as HTMLInputElement;
+      const file = target.files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const importedData: ExportedData = JSON.parse(e.target?.result as string);
+            groups.value = importedData.data;
+            makeNotifyMessage('positive', 'Import Success');
+          } catch (error) {
+            makeNotifyMessage('negative', 'Error Importing FIle');
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+
     return {
+      dialog,
       groups,
       isDark,
       showProtein,
@@ -132,6 +204,10 @@ export default defineComponent({
       loadSampleData,
       clearData,
       addNewGroup,
+      onExport,
+      fileInput,
+      handleFileChange,
+      triggerFileInput,
     };
   },
 });

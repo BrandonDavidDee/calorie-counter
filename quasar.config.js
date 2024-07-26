@@ -13,7 +13,7 @@
 
 const { configure } = require('quasar/wrappers');
 
-module.exports = configure((/* ctx */) => ({
+module.exports = configure((ctx) => ({
   // https://v2.quasar.dev/quasar-cli-vite/prefetch-feature
   // preFetch: true,
 
@@ -56,8 +56,7 @@ module.exports = configure((/* ctx */) => ({
     // vueOptionsAPI: false,
 
     // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
-
-    publicPath: 'https://brandondaviddee.github.io/calorie-counter/',
+    publicPath: ctx.dev ? '/' : 'https://brandondaviddee.github.io/calorie-counter/',
     // analyze: true,
     // env: {},
     // rawDefine: {}
@@ -104,7 +103,7 @@ module.exports = configure((/* ctx */) => ({
     // directives: [],
 
     // Quasar plugins
-    plugins: [],
+    plugins: ['Notify'],
   },
 
   // animations: 'all', // --- includes all animations

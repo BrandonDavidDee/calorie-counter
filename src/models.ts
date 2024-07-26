@@ -10,3 +10,9 @@ export interface EntryGroup {
   name: string;
   entries: LogEntry[]
 }
+
+export interface ExportedData {
+  application: string;
+  timestamp: Date;
+  data: EntryGroup[];
+}
