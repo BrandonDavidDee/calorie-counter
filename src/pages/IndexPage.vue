@@ -114,7 +114,10 @@
 
 <script lang="ts">
 import { EntryGroup, ExportedData } from 'src/models';
-import { defineComponent, ref, computed } from 'vue';
+import {
+  defineComponent, ref, computed, onMounted,
+} from 'vue';
+import { useRoute } from 'vue-router';
 import SiteSettings from 'src/components/SiteSettings.vue';
 import { useQuasar, exportFile } from 'quasar';
 import EntryGroupDetail from 'src/components/EntryGroupDetail.vue';
@@ -132,6 +135,7 @@ export default defineComponent({
     const showCarbs = ref(true);
     const showFat = ref(true);
     const showProtein = ref(true);
+    const route = useRoute();
 
     function makeNotifyMessage(type: string, message: string) {
       $q.notify({ type, message });
@@ -193,6 +197,12 @@ export default defineComponent({
         reader.readAsText(file);
       }
     };
+
+    onMounted(() => {
+      if (route.query.demo) {
+        loadSampleData();
+      }
+    });
 
     return {
       dialog,

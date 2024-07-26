@@ -7,6 +7,10 @@ That being said, I tend to just write things down with pen and paper so this is 
 
 There is no backend, no api calls, no cookies or local storage. If you refresh you start over.
 
+Project is visible here:
+
+https://brandondaviddee.github.io/calorie-counter/#/?demo=true
+
 ## Install the dependencies
 ```
 npm install
