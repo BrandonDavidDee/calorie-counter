@@ -145,6 +145,17 @@
         </tbody>
       </q-markup-table>
     </q-card-section>
+    <q-card-actions
+      align="right"
+    >
+      <q-btn
+        icon="delete"
+        size="sm"
+        flat
+        round
+        @click="$emit('deleteSection')"
+      />
+    </q-card-actions>
   </div>
 </template>
 
@@ -179,6 +190,7 @@ export default defineComponent({
       required: true,
     },
   },
+  emits: ['deleteSection'],
   setup(props) {
     const data = ref<EntryGroup>();
 
@@ -191,9 +203,8 @@ export default defineComponent({
     }
 
     function enforceNumber(value: number | undefined) {
-      if (typeof value === 'number') {
-        return value;
-      }
+      if (!value) { return 0; }
+      if (typeof value === 'number') { return value; }
       return 0;
     }
 

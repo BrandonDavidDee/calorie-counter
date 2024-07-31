@@ -82,8 +82,8 @@
         :show-protein="showProtein"
       />
       <q-card
-        v-for="(g, ii) in groups"
-        :key="ii"
+        v-for="(g, index) in groups"
+        :key="index"
         flat
         square
         bordered
@@ -95,6 +95,7 @@
           :show-carbs="showCarbs"
           :show-fat="showFat"
           :show-protein="showProtein"
+          @delete-section="onDeleteSection(index)"
         />
       </q-card>
     </div>
@@ -154,7 +155,7 @@ export default defineComponent({
     }
 
     function loadSampleData() {
-      groups.value = sampleData;
+      groups.value = JSON.parse(JSON.stringify(sampleData));
     }
 
     function clearData() {
@@ -224,6 +225,10 @@ export default defineComponent({
       }
     });
 
+    function onDeleteSection(index: number) {
+      groups.value.splice(index, 1);
+    }
+
     return {
       dialog,
       groups,
@@ -238,6 +243,7 @@ export default defineComponent({
       fileInput,
       handleFileChange,
       triggerFileInput,
+      onDeleteSection,
     };
   },
 });
