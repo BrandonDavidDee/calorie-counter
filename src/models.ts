@@ -1,5 +1,6 @@
 export interface LogEntry {
   name: string;
+  quantity: number;
   calories: number;
   carbs: number;
   fat: number;

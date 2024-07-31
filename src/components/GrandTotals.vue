@@ -91,7 +91,8 @@ export default defineComponent({
   },
   setup(props) {
     const calculateTotal = (key: keyof LogEntry) => props.groups.reduce((groupAcc, group) => {
-      const groupTotal = group.entries.reduce((acc, entry) => acc + (entry[key] as number), 0);
+      // eslint-disable-next-line max-len
+      const groupTotal = group.entries.reduce((acc, entry) => acc + (entry[key] as number * entry.quantity), 0);
       return groupAcc + groupTotal;
     }, 0);
 

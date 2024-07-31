@@ -4,6 +4,7 @@ export default [
     entries: [
       {
         name: 'pancakes',
+        quantity: 1,
         calories: 350,
         carbs: 50,
         fat: 10,
@@ -11,6 +12,7 @@ export default [
       },
       {
         name: 'scrambled eggs',
+        quantity: 1,
         calories: 200,
         carbs: 2,
         fat: 15,
@@ -18,6 +20,7 @@ export default [
       },
       {
         name: 'bacon',
+        quantity: 1,
         calories: 150,
         carbs: 0,
         fat: 12,
@@ -25,6 +28,7 @@ export default [
       },
       {
         name: 'toast',
+        quantity: 1,
         calories: 100,
         carbs: 20,
         fat: 2,
@@ -37,6 +41,7 @@ export default [
     entries: [
       {
         name: 'yogurt',
+        quantity: 1,
         calories: 120,
         carbs: 15,
         fat: 4,
@@ -44,6 +49,7 @@ export default [
       },
       {
         name: 'granola bar',
+        quantity: 1,
         calories: 200,
         carbs: 30,
         fat: 7,
@@ -51,6 +57,7 @@ export default [
       },
       {
         name: 'bagel with cream cheese',
+        quantity: 1,
         calories: 300,
         carbs: 50,
         fat: 10,
@@ -64,12 +71,14 @@ export default [
       {
         name: 'grilled chicken breast',
         calories: 220,
+        quantity: 1,
         carbs: 0,
         fat: 5,
         protein: 40,
       },
       {
         name: 'vegetable stir-fry',
+        quantity: 1,
         calories: 250,
         carbs: 45,
         fat: 10,
@@ -77,6 +86,7 @@ export default [
       },
       {
         name: 'quinoa and black beans',
+        quantity: 1,
         calories: 350,
         carbs: 60,
         fat: 10,

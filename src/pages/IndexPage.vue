@@ -44,7 +44,7 @@
       </div>
       <q-banner
         v-show="!groups.length"
-        :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'"
+        :class="$q.dark.isActive ? 'bg-grey-10' : 'bg-grey-4'"
         class="q-mt-md"
       >
         <template #avatar>
@@ -53,7 +53,19 @@
             :color="$q.dark.isActive ? 'white' : 'grey-9'"
           />
         </template>
-        What is this?
+        <p class="text-center">
+          This is a simple calorie tracking project I made for myself.
+          It's essentially a glorified log and calculator.
+        </p>
+        <p class="text-center">
+          The code for this project is available here:
+          <a
+            href="https://github.com/BrandonDavidDee/calorie-counter"
+            target="_blank"
+          >
+            https://github.com/BrandonDavidDee/calorie-counter
+          </a>
+        </p>
         <template #action>
           <q-btn
             label="Load Sample Data"
@@ -113,7 +125,7 @@
 </template>
 
 <script lang="ts">
-import { EntryGroup, ExportedData } from 'src/models';
+import { EntryGroup, ExportedData, LogEntry } from 'src/models';
 import {
   defineComponent, ref, computed, onMounted,
 } from 'vue';
@@ -151,9 +163,17 @@ export default defineComponent({
     }
 
     function addNewGroup() {
+      const newEntry: LogEntry = {
+        name: 'New Item',
+        quantity: 1,
+        calories: 0,
+        carbs: 0,
+        fat: 0,
+        protein: 0,
+      };
       const newGroup: EntryGroup = {
         name: 'New Group Name',
-        entries: [],
+        entries: [newEntry],
       };
       groups.value.push(newGroup);
     }
@@ -222,3 +242,9 @@ export default defineComponent({
   },
 });
 </script>
+
+<style>
+a:link, a:visited, a:hover, a:active {
+  color: red;
+}
+</style>

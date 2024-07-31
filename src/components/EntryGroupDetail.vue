@@ -20,6 +20,9 @@
               Name
             </th>
             <th class="text-left">
+              Quantity
+            </th>
+            <th class="text-left">
               Calories
             </th>
             <th
@@ -55,11 +58,24 @@
           <tr
             v-for="(e, index) in data.entries"
             :key="index"
+            :class="getRowClass(e)"
           >
             <td>
-              <TableData
-                v-model:value="e.name"
-                label="Name"
+              <q-input
+                v-model="e.name"
+                dense
+                color="black"
+                filled
+                square
+              />
+            </td>
+            <td>
+              <q-input
+                v-model.number="e.quantity"
+                dense
+                color="black"
+                filled
+                square
               />
             </td>
             <td>
@@ -109,7 +125,7 @@
             </td>
           </tr>
           <tr :class="isDark ? 'bg-grey-9' : 'bg-grey-2'">
-            <td>
+            <td colspan="2">
               {{ parseTotalItems(data.entries) }}
             </td>
             <td>
@@ -174,12 +190,21 @@ export default defineComponent({
       return `${entries.length} ${entries.length === 1 ? 'Item' : 'Items'}`;
     }
 
+    function enforceNumber(value: number | undefined) {
+      if (typeof value === 'number') {
+        return value;
+      }
+      return 0;
+    }
+
     function totalGroupProperty(entries: LogEntry[], propertyName: keyof LogEntry): number {
-      return entries.reduce((acc, obj) => acc + (obj[propertyName] as number || 0), 0);
+      // eslint-disable-next-line max-len
+      return entries.reduce((acc, obj) => acc + ((obj[propertyName] as number || 0) * enforceNumber(obj.quantity)), 0);
     }
     function addNew() {
       const newEntry: LogEntry = {
         name: 'New Item',
+        quantity: 1,
         calories: 0,
         carbs: 0,
         fat: 0,
@@ -191,12 +216,20 @@ export default defineComponent({
     function removeItem(index: number) {
       data.value?.entries.splice(index, 1);
     }
+
+    function getRowClass(row: LogEntry) {
+      const noValue = typeof row.quantity !== 'number' || !row.quantity;
+      const light = noValue ? 'bg-grey-4' : '';
+      const dark = noValue ? 'bg-grey-8' : '';
+      return props.isDark ? dark : light;
+    }
     return {
       data,
       parseTotalItems,
       totalGroupProperty,
       addNew,
       removeItem,
+      getRowClass,
     };
   },
 });
